@@ -12,12 +12,10 @@ import (
 	"strings"
 )
 
-type FileOps struct {
-	dir string
-}
+type FileOps struct{}
 
-func new(dir string) *FileOps {
-	return &FileOps{dir}
+func newFileOps() *FileOps {
+	return &FileOps{}
 }
 
 func (fo *FileOps) compressZip(srcDir string, dstZipFile string) error {
@@ -172,4 +170,20 @@ func (fo *FileOps) untargz(tgFile string) error {
 		}
 	}
 	return nil
+}
+
+func (fo *FileOps) fileInfo(fp string) (string, int64, error) {
+	info, err := os.Stat(fp)
+	if err != nil {
+		return "", -1, err
+	}
+	return info.Name(), info.Size(), nil
+}
+
+func (fo *FileOps) isExist(fp string, size int64) bool {
+	_, localSize, err := fo.fileInfo(fp)
+	if err == nil && localSize == int64(size) {
+		return true
+	}
+	return false
 }

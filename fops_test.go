@@ -11,7 +11,7 @@ var (
 )
 
 func init() {
-	fo = new("./testData")
+	fo = newFileOps()
 	currentDir, _ = os.Getwd()
 }
 
